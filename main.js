@@ -46,8 +46,8 @@ ls('data/', function(err, tree)
         for(var file_name in files)
         {
             var ground_truth = file_name.substring(5, file_name.indexOf('_'));
-            console.log(ground_truth, getSHA1(ground_truth));
-
+            //console.log(ground_truth, getSHA1(ground_truth));
+			console.log(ground_truth, file_name);
             var ret_time = [];
             var abs_time = [];
 
