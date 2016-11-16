@@ -25,12 +25,14 @@ ls('data/', function(err, tree)
                 console.error(err);
                 process.exit(-1);
             }
-            files[file] = result;
+            //files[file] = result;
+			callback(file, result);
+
 
             if(tree.length > 0)
                 next(tree.shift(), tree, callback);
-            else
-                callback();
+            //else
+                //callback();
         });
     }
 
@@ -39,19 +41,20 @@ ls('data/', function(err, tree)
     }
 
     //console.log(tree);
-    next(tree.shift(), tree, function()
+    next(tree.shift(), tree, function(file_name, file)
     {
         var master_object = {};
-
-        for(var file_name in files)
-        {
+		
+        //for(var file_name in files)
+        //{
+		
             var ground_truth = file_name.substring(5, file_name.indexOf('_'));
             //console.log(ground_truth, getSHA1(ground_truth));
 			console.log(ground_truth, file_name);
             var ret_time = [];
             var abs_time = [];
 
-            var file = files[file_name];
+            //var file = files[file_name];
             for(var id in file)
             {
                 var object = file[id];
@@ -65,6 +68,6 @@ ls('data/', function(err, tree)
             console.log(abs_time.join(' '));
             //console.log(files[file_name]);
             //console.log(file);
-        }
+        //}
     });
 });
