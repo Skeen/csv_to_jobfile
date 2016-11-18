@@ -45,7 +45,20 @@ ls(process.argv[2], function(err, tree)
 
         for(var file_name in files)
         {
-            var ground_truth = file_name.substring(5, file_name.indexOf('_'));
+            // Find the first _ and .
+            var first_underscore = file_name.indexOf('_');
+            var last_dot = file_name.lastIndexOf('.');
+
+            first_underscore = (first_underscore == -1 ? Number.POSITIVE_INFINITY : first_underscore);
+            last_dot = (last_dot == -1 ? Number.POSITIVE_INFINITY : last_dot);
+            var first_seperator = Math.min(first_underscore, last_dot);
+            if(first_seperator == Number.POSITIVE_INFINITY)
+            {
+                console.error("Fatal Error: No seperator found!");
+                process.exit(-1);
+            }
+
+            var ground_truth = file_name.substring(process.argv[2].length+1, first_seperator);
             console.log(ground_truth, getSHA1(ground_truth));
 
             var ret_time = [];
