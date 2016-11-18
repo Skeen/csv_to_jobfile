@@ -6,7 +6,7 @@ var crypto = require('crypto');
 // All files will be contained within this object
 var files = {};
 // Read all csv files in subdirectory
-ls('data/', function(err, tree)
+ls(process.argv[2], function(err, tree)
 {
     if(err)
     {
