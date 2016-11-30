@@ -1,7 +1,6 @@
-var ls = require('list-directory-contents');
-var Converter = require("csvtojson").Converter;
-var json2csv = require('json2csv');
-var crypto = require('crypto');
+var ls          = require('list-directory-contents');
+var Converter   = require("csvtojson").Converter;
+var path        = require('path');
 
 var input_folder = process.argv[2];
 // Read all csv files in subdirectory
@@ -31,28 +30,26 @@ ls(input_folder, function(err, tree)
         });
     }
 
-    var getSHA1 = function(input){
-        return crypto.createHash('sha1').update(input).digest('hex');
-    }
-
     //console.log(tree);
     next(tree.shift(), tree, function(file_name, file)
     {
-        // Find the first _ and .
-        var first_underscore = file_name.indexOf('_');
-        var last_dot = file_name.lastIndexOf('.');
-
+        // Get basename
+        var name = path.basename(file_name);
+        // Find the first '_' and last '.'
+        var first_underscore = name.indexOf('_');
+        var last_dot = name.lastIndexOf('.');
+        // Figure out which one comes first
         first_underscore = (first_underscore == -1 ? Number.POSITIVE_INFINITY : first_underscore);
         last_dot = (last_dot == -1 ? Number.POSITIVE_INFINITY : last_dot);
         var first_seperator = Math.min(first_underscore, last_dot);
+        // If no seperator is found, throw an error
         if(first_seperator == Number.POSITIVE_INFINITY)
         {
             console.error("Fatal Error: No seperator found!");
             process.exit(-1);
         }
-
-        var ground_truth = file_name.substring(input_folder.length+1, first_seperator);
-        //console.log(ground_truth, getSHA1(ground_truth));
+        // Split name to only contain up to first seperator
+        var ground_truth = name.substring(0, first_seperator);
         console.log(ground_truth, file_name);
 
         var ret_time = [];
