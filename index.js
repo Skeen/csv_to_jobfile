@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+'use strict';
+
 var ls          = require('list-directory-contents');
 var Converter   = require("csvtojson").Converter;
 var path        = require('path');
